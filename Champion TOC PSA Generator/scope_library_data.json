@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "services": {
+    "Full Cycle Talent Acquisition Support": {
+      "service_key": "Full Cycle Talent Acquisition Support",
+      "display_title": "Full Cycle Talent Acquisition Support",
+      "services_summary_category": "Recruitment-as-a-Service (RaaS)",
+      "category": "Recruitment-as-a-Service (RaaS)",
+      "status": "active",
+      "locked": true,
+      "version": 1,
+      "last_updated": "2026-07-21",
+      "overview": "Provide end-to-end recruiting support to attract, assess, and secure qualified candidates while partnering closely with hiring managers.",
+      "primary_services": [
+        "Candidate Sourcing and Screening",
+        "Interview and Hiring Coordination",
+        "Offer and Candidate Management"
+      ],
+      "optional_modules": [
+        "Job-Description Development",
+        "Applicant Tracking System Support",
+        "Hiring-Manager Training",
+        "Talent-Market Research"
+      ],
+      "exclusions": [],
+      "guardrails": [
+        "Do not limit the scope to one named position unless the agreement is explicitly intended to cover only that position.",
+        "The service must remain usable when roles are added, paused, closed, reopened, replaced, or changed during the contract term.",
+        "Keep it brief and executive-friendly: a title, one short paragraph, and 3 (occasionally 4) concise bullets — never a step-by-step account of the recruiting process."
+      ],
+      "history": []
+    },
+    "Sourcing Support": {
+      "service_key": "Sourcing Support",
+      "display_title": "Sourcing Support",
+      "services_summary_category": "Recruitment-as-a-Service (RaaS)",
+      "category": "Recruitment-as-a-Service (RaaS)",
+      "status": "active",
+      "locked": true,
+      "version": 1,
+      "last_updated": "2026-07-21",
+      "overview": "Provide focused candidate sourcing and pipeline-building support to help the Client identify strong prospects for priority roles.",
+      "primary_services": [
+        "Candidate Research and Outreach",
+        "Talent Pipeline Development",
+        "Sourcing Progress Updates"
+      ],
+      "optional_modules": [
+        "Market or Competitor Talent Mapping",
+        "Diversity Sourcing Strategy",
+        "Job-Posting Support"
+      ],
+      "exclusions": [
+        "Interview coordination",
+        "Offer development",
+        "Offer negotiation",
+        "End-to-end recruiting-process ownership"
+      ],
+      "guardrails": [
+        "Do not automatically include full-cycle recruiting responsibilities (see exclusions). Only include them when specifically discussed and approved.",
+        "Keep it brief and executive-friendly: a title, one short paragraph, and 3 (occasionally 4) concise bullets."
+      ],
+      "history": []
+    },
+    "HR Project Support": {
+      "service_key": "HR Project Support",
+      "display_title": "HR Project Support",
+      "services_summary_category": "Human Resources Consulting",
+      "category": "Human Resources Consulting",
+      "status": "active",
+      "locked": true,
+      "version": 1,
+      "last_updated": "2026-07-21",
+      "overview": "Provide project-based HR consulting support tailored to the Client's priorities, with clear objectives and defined deliverables.",
+      "primary_services": [
+        "Current-State Assessment",
+        "Recommendations and Action Plan",
+        "Policy or Process Documentation"
+      ],
+      "optional_modules": [
+        "HR Compliance Review",
+        "Employee-Relations Support",
+        "Performance-Management Design",
+        "Compensation or Benefits Support"
+      ],
+      "exclusions": [],
+      "guardrails": [
+        "Use a more specific project title (e.g. \"HR Compliance Assessment\") only when the discovery notes clearly describe a distinct, named project. Otherwise keep the title as \"HR Project Support.\"",
+        "Do not insert unrelated HR services simply because they exist in the library.",
+        "Keep it brief and executive-friendly: a title, one short paragraph, and 3 (occasionally 4) concise bullets — never a full project plan."
+      ],
+      "history": []
+    },
+    "Fractional/Interim HR Support": {
+      "service_key": "Fractional/Interim HR Support",
+      "display_title": "Fractional/Interim HR Support",
+      "services_summary_category": "Human Resources Consulting",
+      "category": "Human Resources Consulting",
+      "status": "active",
+      "locked": true,
+      "version": 1,
+      "last_updated": "2026-07-21",
+      "overview": "Provide experienced interim HR leadership and hands-on support to maintain continuity while addressing immediate organizational priorities.",
+      "primary_services": [
+        "Day-to-Day HR Leadership",
+        "Employee and Manager Support",
+        "Compliance and Operational Guidance"
+      ],
+      "optional_modules": [
+        "Performance-Management Support",
+        "Manager Coaching",
+        "Compensation and Benefits Coordination",
+        "Recruiting and Onboarding Support"
+      ],
+      "exclusions": [],
+      "guardrails": [
+        "Remain flexible enough to support changing HR priorities during the engagement.",
+        "Keep it brief and executive-friendly: a title, one short paragraph, and 3 (occasionally 4) concise bullets."
+      ],
+      "history": []
+    },
+    "HR Subscription": {
+      "service_key": "HR Subscription",
+      "display_title": "HR Subscription",
+      "services_summary_category": "Human Resources Consulting",
+      "category": "Human Resources Consulting",
+      "status": "active",
+      "locked": true,
+      "version": 1,
+      "last_updated": "2026-07-21",
+      "overview": "Provide ongoing HR guidance and support based on the organization's priorities, employee needs, and evolving business requirements.",
+      "primary_services": [
+        "Strategic HR Guidance",
+        "Employee Relations Support",
+        "Policy and Compliance Assistance"
+      ],
+      "optional_modules": [
+        "Manager Coaching",
+        "Onboarding or Offboarding Guidance",
+        "Basic Compliance Guidance"
+      ],
+      "exclusions": [
+        "Large standalone projects",
+        "Extensive investigations",
+        "Continuous onsite coverage",
+        "Full interim HR leadership",
+        "Legal representation"
+      ],
+      "guardrails": [
+        "The scope may note that larger initiatives will be separately scoped and mutually approved.",
+        "Keep it brief and executive-friendly: a title, one short paragraph, and 3 (occasionally 4) concise bullets."
+      ],
+      "history": []
+    }
+  }
+}
