@@ -20,6 +20,20 @@ def find_existing_file(candidates: Iterable[Path]) -> Path | None:
 
 
 # ---------------------------------------------------------------------------
+# GitHub-backed persistence for the Scope Library
+# ---------------------------------------------------------------------------
+# Streamlit Community Cloud's filesystem is ephemeral (reset on every
+# redeploy/sleep-wake cycle), so a write to scope_library_data.json alone
+# does not survive a restart. scope_library.py also commits every save back
+# to this repo via the GitHub Contents API so the change persists. Only the
+# token (GITHUB_TOKEN, read from the environment/secrets) is sensitive —
+# the repo and path below are not secrets, just where the file lives.
+GITHUB_REPO_SLUG = "katieperry-toc/TOC-PSA-Generator"
+GITHUB_REPO_BRANCH = "main"
+SCOPE_LIBRARY_DATA_REPO_PATH = "Champion TOC PSA Generator/scope_library_data.json"
+
+
+# ---------------------------------------------------------------------------
 # Template registry
 # ---------------------------------------------------------------------------
 # Builders should look documents up by key (see TEMPLATES below) instead of

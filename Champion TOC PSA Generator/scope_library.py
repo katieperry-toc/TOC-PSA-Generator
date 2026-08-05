@@ -55,11 +55,19 @@ Roughly 90-120 words total. The Word template already renders a bold
 inserted, so the generated text itself must never repeat that heading.
 """
 
+import base64
 import json
+import os
 from copy import deepcopy
 from datetime import date
 from pathlib import Path
 from typing import Dict, List, Optional, TypedDict
+
+from config import (
+    GITHUB_REPO_BRANCH,
+    GITHUB_REPO_SLUG,
+    SCOPE_LIBRARY_DATA_REPO_PATH,
+)
 
 DATA_PATH = Path(__file__).resolve().parent / "scope_library_data.json"
 
@@ -95,11 +103,92 @@ def _load_raw() -> Dict:
         return json.load(f)
 
 
+_LAST_GITHUB_SYNC_ERROR: Optional[str] = None
+
+
+def get_last_sync_warning() -> Optional[str]:
+    """Return a human-readable warning if the most recent save could not be
+    persisted to GitHub (and therefore may not survive a Streamlit Cloud
+    restart), or None if the last save synced successfully.
+
+    Callers (the admin page) should check this after every action that
+    triggers a save and surface it via st.warning — this module never
+    imports Streamlit itself.
+    """
+    return _LAST_GITHUB_SYNC_ERROR
+
+
+def _commit_to_github(data: Dict, message: str) -> None:
+    """Best-effort: commit the updated Scope Library JSON back to GitHub.
+
+    The local write to DATA_PATH (done by the caller, _save_raw) already
+    makes the change effective immediately for the current running app.
+    This additionally pushes the same content to GitHub so the change is
+    still there the next time Streamlit Cloud restarts the app from a
+    fresh clone — otherwise every admin edit would silently vanish on the
+    next redeploy or sleep/wake cycle, since Cloud's filesystem is
+    ephemeral. Never raises: any failure here (missing token, network
+    error, GitHub API error) is recorded via get_last_sync_warning()
+    instead, so a sync problem never blocks the admin page from working.
+    """
+    global _LAST_GITHUB_SYNC_ERROR
+
+    token = os.getenv("GITHUB_TOKEN", "").strip()
+    if not token:
+        _LAST_GITHUB_SYNC_ERROR = (
+            "GITHUB_TOKEN is not configured — this change was saved locally "
+            "only and will be lost on the next app restart."
+        )
+        return
+
+    try:
+        import requests
+
+        api_url = (
+            f"https://api.github.com/repos/{GITHUB_REPO_SLUG}/contents/"
+            f"{SCOPE_LIBRARY_DATA_REPO_PATH}"
+        )
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+        }
+
+        current = requests.get(
+            api_url,
+            headers=headers,
+            params={"ref": GITHUB_REPO_BRANCH},
+            timeout=10,
+        )
+        current.raise_for_status()
+        current_sha = current.json()["sha"]
+
+        content_bytes = json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
+        response = requests.put(
+            api_url,
+            headers=headers,
+            json={
+                "message": message,
+                "content": base64.b64encode(content_bytes).decode("ascii"),
+                "sha": current_sha,
+                "branch": GITHUB_REPO_BRANCH,
+            },
+            timeout=10,
+        )
+        response.raise_for_status()
+        _LAST_GITHUB_SYNC_ERROR = None
+    except Exception as exc:
+        _LAST_GITHUB_SYNC_ERROR = (
+            "Could not sync this change to GitHub — it was saved locally "
+            f"only and may be lost on the next app restart ({exc})."
+        )
+
+
 def _save_raw(data: Dict) -> None:
     tmp_path = DATA_PATH.with_suffix(".json.tmp")
     with open(tmp_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
     tmp_path.replace(DATA_PATH)
+    _commit_to_github(data, "Update Scope Library via admin page")
 
 
 def _all_entries() -> Dict[str, Dict]:

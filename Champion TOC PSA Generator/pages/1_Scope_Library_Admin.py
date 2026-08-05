@@ -74,6 +74,17 @@ def _lines_to_list(text: str) -> list:
 def _list_to_lines(items: list) -> str:
     return "\n".join(items)
 
+def _flag_sync_warning() -> None:
+    """Carry a GitHub-persistence warning across st.rerun() so it's still
+    visible on the next render, instead of being cleared by the rerun
+    before anyone sees it."""
+    warning = sl.get_last_sync_warning()
+    if warning:
+        st.session_state["scope_admin_sync_warning"] = warning
+
+if st.session_state.get("scope_admin_sync_warning"):
+    st.warning(st.session_state.pop("scope_admin_sync_warning"))
+
 scopes = sl.list_all_scopes()
 categories = sorted({s.get("category", "") for s in scopes if s.get("category")})
 
@@ -133,6 +144,7 @@ with tab_manage:
                             content["display_title"] = display_title.strip() or entry["display_title"]
                             content["category"] = category_value.strip() or entry["category"]
                         updated = sl.save_scope(key, content)
+                        _flag_sync_warning()
                         st.success(f"Saved as version {updated['version']}.")
                         st.rerun()
 
@@ -155,6 +167,7 @@ with tab_manage:
                     if st.button("Clone", key=f"clone_btn_{key}", use_container_width=True):
                         if clone_name.strip():
                             new_key = sl.clone_scope(key, clone_name.strip())
+                            _flag_sync_warning()
                             st.success(f"Cloned as draft: {new_key}")
                             st.rerun()
                         else:
@@ -165,10 +178,12 @@ with tab_manage:
                     if not locked and status == "active":
                         if st.button("Archive", key=f"archive_btn_{key}", use_container_width=True):
                             sl.archive_scope(key)
+                            _flag_sync_warning()
                             st.rerun()
                     elif not locked and status == "archived":
                         if st.button("Restore", key=f"restore_btn_{key}", use_container_width=True):
                             sl.restore_scope(key)
+                            _flag_sync_warning()
                             st.rerun()
                 with action_cols[3]:
                     st.write("")
@@ -176,6 +191,7 @@ with tab_manage:
                     if not locked:
                         if st.button("Delete Draft", key=f"delete_btn_{key}", use_container_width=True):
                             sl.delete_draft_scope(key)
+                            _flag_sync_warning()
                             st.rerun()
 
 with tab_new:
@@ -194,6 +210,7 @@ with tab_new:
                 st.error("Enter a display title.")
             else:
                 new_key = sl.add_new_scope(new_title.strip(), new_category.strip())
+                _flag_sync_warning()
                 st.success(f"Created draft: {new_key}. Edit it under Manage Scopes.")
                 st.rerun()
 
