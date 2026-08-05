@@ -1475,6 +1475,11 @@ def apply_final_formatting(doc: Document) -> None:
     # Preserve the template-authored handwritten signature anchor.
     preserve_template_signature_position(doc)
 
+    # Without this, page numbers and other fields can show whatever value
+    # was last cached when the template was saved in Word, until someone
+    # manually recalculates (Ctrl+A, F9).
+    force_field_recalculation_on_open(doc)
+
 def force_field_recalculation_on_open(doc: Document) -> None:
     """Make Word recompute every field (page numbers, dates, etc.) as soon
     as the generated PSA is opened.
