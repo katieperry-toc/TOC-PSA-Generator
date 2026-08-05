@@ -1,0 +1,20 @@
+# Secrets and credentials — never commit these
+.env
+.env.*
+*.env
+.streamlit/secrets.toml
+*credentials*.json
+*credentials*.toml
+*service_account*.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# OS/editor cruft
+.DS_Store
+Thumbs.db
