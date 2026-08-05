@@ -8,11 +8,37 @@ through scope_library.py's admin functions — it never touches the Word
 template, psa_builder.py, or any document-generation code.
 """
 
+import os
+
 import streamlit as st
+from dotenv import load_dotenv
 
 import scope_library as sl
 
+load_dotenv()
+
 st.set_page_config(page_title="Scope Library Admin", page_icon="🗂️", layout="wide")
+
+ADMIN_PASSWORD = os.getenv("SCOPE_LIBRARY_ADMIN_PASSWORD", "")
+
+if "scope_admin_authenticated" not in st.session_state:
+    st.session_state.scope_admin_authenticated = False
+
+if not st.session_state.scope_admin_authenticated:
+    st.title("Scope Library Admin")
+    st.text_input("Password", type="password", key="scope_admin_password_input")
+    if st.button("Log in", type="primary"):
+        if ADMIN_PASSWORD and st.session_state.scope_admin_password_input == ADMIN_PASSWORD:
+            st.session_state.scope_admin_authenticated = True
+            st.rerun()
+        elif not ADMIN_PASSWORD:
+            st.error(
+                "SCOPE_LIBRARY_ADMIN_PASSWORD is not configured — set it in "
+                ".env locally or in Streamlit Cloud's app secrets."
+            )
+        else:
+            st.error("Incorrect password.")
+    st.stop()
 
 st.markdown(
     """
